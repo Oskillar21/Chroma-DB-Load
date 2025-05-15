@@ -18,5 +18,3 @@ def store_embedding_api(embedding: Embedding):
         return {"message": "Embedding almacenado correctamente"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-    
