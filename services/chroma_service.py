@@ -1,7 +1,9 @@
 import chromadb
 
-# Crea cliente con persistencia directamente
-client = chromadb.PersistentClient(path="./chroma_data")
+
+# Usar PersistentClient (almacenamiento local)
+client = chromadb.PersistentClient(path="./chroma_db")
+
 
 # Obtén o crea colección
 collection = client.get_or_create_collection(name="document_embeddings")
@@ -12,7 +14,6 @@ def store_embedding(document_id: str, embedding: list[float], metadata: dict):
         ids=[document_id],
         metadatas=[metadata]
     )
-    # No hace falta llamar a persist, se guarda automáticamente
 
 def get_all_embeddings():
     collection = client.get_or_create_collection(name="document_embeddings")
@@ -21,5 +22,7 @@ def get_all_embeddings():
         "ids": data["ids"],
         "embeddings": data["embeddings"],
         "metadatas": data["metadatas"]
+    }
+
     }
 

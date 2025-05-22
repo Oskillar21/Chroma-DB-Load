@@ -1,5 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from models.embedding import Embedding
+
+from services.chroma_service import get_all_embeddings, store_embedding as save_embedding
+
+
+from services.chroma_service import store_embedding as save_embedding
 from services.chroma_service import get_all_embeddings, store_embedding as save_embedding
 
 router = APIRouter()
