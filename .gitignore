@@ -1,0 +1,22 @@
+# Entorno virtual
+venv/
+ENV/
+env/
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+
+# Archivos temporales o de pruebas
+temp_*
+*.log
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de dependencias si usas Jupyter o similares
+.ipynb_checkpoints/
+
+# Otros archivos comunes a ignorar
+*.egg-info/
