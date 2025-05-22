@@ -1,5 +1,6 @@
 # Chroma-DB-Load
 
+
 API encargada de la generacion de Embeddings para su debido guardado.
 
 Cuando descarguen los cambios de la rama ejecutar el siguiente comando para que le instale todas las dependencias necesarias del proyecto.
@@ -25,3 +26,8 @@ Estructura JSON a utilizar
 "source": "testsegundo"
 }
 }
+=======
+API encargada de la generacion de Embeddings para su debido guardado. 
+
+
+Nueva edicion para veficacion de commits
