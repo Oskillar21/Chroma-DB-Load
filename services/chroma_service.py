@@ -23,6 +23,3 @@ def get_all_embeddings():
         "embeddings": data["embeddings"],
         "metadatas": data["metadatas"]
     }
-
-    }
-
