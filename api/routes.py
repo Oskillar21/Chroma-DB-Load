@@ -31,18 +31,8 @@ def get_embeddings_api():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-#
-#@router.post("/query_embedding")
-#def query_embedding_api(payload: QueryRequest):
-#    try:
-#        results = query_embedding(payload.embedding, payload.top_k)
-#        return {"results": results}
-#    except Exception as e:
-#        raise HTTPException(status_code=500, detail=str(e))
-#
 class MessageInput(BaseModel):
     message: str
-
 
 @router.post("/embeddings")
 def chroma_response(input: MessageInput):
