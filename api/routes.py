@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from models.embedding import Embedding
+from fastapi.responses import JSONResponse
 from services.chroma_service import (
     store_embedding as save_embedding,
     get_all_embeddings,
-    query_embedding
+    query_similar_documents,
 )
 
 router = APIRouter()
@@ -30,10 +31,26 @@ def get_embeddings_api():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/query_embedding")
-def query_embedding_api(payload: QueryRequest):
+#
+#@router.post("/query_embedding")
+#def query_embedding_api(payload: QueryRequest):
+#    try:
+#        results = query_embedding(payload.embedding, payload.top_k)
+#        return {"results": results}
+#    except Exception as e:
+#        raise HTTPException(status_code=500, detail=str(e))
+#
+class MessageInput(BaseModel):
+    message: str
+
+
+@router.post("/embeddings")
+def chroma_response(input: MessageInput):
     try:
-        results = query_embedding(payload.embedding, payload.top_k)
-        return {"results": results}
+        response = query_similar_documents(input.message)
+        return {"response": response}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Ocurrió un error al procesar la solicitud: {str(e)}"},
+        )

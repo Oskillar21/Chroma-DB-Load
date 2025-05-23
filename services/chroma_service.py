@@ -1,11 +1,15 @@
 import chromadb
 from fastapi import HTTPException
+from sentence_transformers import SentenceTransformer
 
 # Usar PersistentClient (almacenamiento local)
 client = chromadb.PersistentClient(path="./chroma_db")
 
 # Obtén o crea colección
 collection = client.get_or_create_collection(name="document_embeddings")
+
+# Cargar el modelo de embeddings
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
 def store_embedding(document_id: str, embedding: list[float], metadata: dict):
     collection.add(
@@ -22,28 +26,28 @@ def get_all_embeddings():
         "metadatas": data["metadatas"]
     }
 
+def generate_embedding(text: str) -> list[float]:
+    return model.encode(text).tolist()
 
-# Nueva funcion 
-def query_embedding(embedding: list[float], top_k: int = 3):
-    try:
-        results = collection.query(
-            query_embeddings=[embedding],
-            n_results=top_k,
-            include=["documents", "metadatas"]  #  CORREGIDO
-        )
+def query_similar_documents(message: str) -> str:
+    # Generar el embedding del mensaje
+    embedding = generate_embedding(message)
 
-        combined = []
-        documents = results.get("documents")
-        metadatas = results.get("metadatas")
-        if documents and documents[0] is not None and metadatas and metadatas[0] is not None:
-            for i in range(len(documents[0])):
-                combined.append({
-                    "document": documents[0][i],
-                    "metadata": metadatas[0][i]
-                })
+    # Consultar los documentos más similares
+    results = collection.query(
+        query_embeddings=[embedding],
+        n_results=3
+    )
 
-        return combined
+    # Extraer los metadatos de los resultados
+    metadatas = results.get("metadatas", [[]])[0]
 
-    except Exception as e:
-        print(" ERROR al consultar ChromaDB:", str(e))
-        raise HTTPException(status_code=500, detail=f"Error al consultar ChromaDB: {str(e)}")
+    if not metadatas:
+        return "No se encontraron resultados relevantes."
+
+    # Construir una respuesta basada en los metadatos
+    response = "He encontrado la siguiente información relacionada:\n"
+    for idx, metadata in enumerate(metadatas, start=1):
+        response += f"\n{idx}. {metadata}"
+        
+    return response
