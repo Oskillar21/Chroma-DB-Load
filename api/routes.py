@@ -12,7 +12,7 @@ router = APIRouter()
 # Modelo para la consulta de similitud
 class QueryRequest(BaseModel):
     embedding: list[float]
-    top_k: int = 3
+    top_k: int
 
 @router.post("/store_embedding")
 def store_embedding_api(payload: Embedding):

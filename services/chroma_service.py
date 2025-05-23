@@ -22,6 +22,8 @@ def get_all_embeddings():
         "metadatas": data["metadatas"]
     }
 
+
+# Nueva funcion 
 def query_embedding(embedding: list[float], top_k: int = 3):
     try:
         results = collection.query(
