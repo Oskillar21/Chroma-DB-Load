@@ -1,10 +1,18 @@
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 from models.embedding import Embedding
-from services.chroma_service import get_all_embeddings, store_embedding as save_embedding
-from services.chroma_service import store_embedding as save_embedding
-from services.chroma_service import get_all_embeddings, store_embedding as save_embedding
+from services.chroma_service import (
+    store_embedding as save_embedding,
+    get_all_embeddings,
+    query_embedding
+)
 
 router = APIRouter()
+
+# Modelo para la consulta de similitud
+class QueryRequest(BaseModel):
+    embedding: list[float]
+    top_k: int = 3
 
 @router.post("/store_embedding")
 def store_embedding_api(payload: Embedding):
@@ -19,5 +27,13 @@ def get_embeddings_api():
     try:
         data = get_all_embeddings()
         return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/query_embedding")
+def query_embedding_api(payload: QueryRequest):
+    try:
+        results = query_embedding(payload.embedding, payload.top_k)
+        return {"results": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
