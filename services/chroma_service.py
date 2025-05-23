@@ -27,19 +27,21 @@ def query_embedding(embedding: list[float], top_k: int = 3):
         results = collection.query(
             query_embeddings=[embedding],
             n_results=top_k,
-            include=["documents", "metadatas"]  # ✅ CORREGIDO
+            include=["documents", "metadatas"]  #  CORREGIDO
         )
 
         combined = []
-        for i in range(len(results["documents"][0])): # type: ignore
-            combined.append({
-                "document": results["documents"][0][i], # type: ignore
-                "metadata": results["metadatas"][0][i] # type: ignore
-            })
+        documents = results.get("documents")
+        metadatas = results.get("metadatas")
+        if documents and documents[0] is not None and metadatas and metadatas[0] is not None:
+            for i in range(len(documents[0])):
+                combined.append({
+                    "document": documents[0][i],
+                    "metadata": metadatas[0][i]
+                })
 
         return combined
 
     except Exception as e:
-        print("❌ ERROR al consultar ChromaDB:", str(e))
+        print(" ERROR al consultar ChromaDB:", str(e))
         raise HTTPException(status_code=500, detail=f"Error al consultar ChromaDB: {str(e)}")
-
