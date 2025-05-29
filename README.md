@@ -1,33 +1,22 @@
 # Chroma-DB-Load
 
+API desarrollada con FastAPI para generar embeddings a partir de documentos y almacenarlos en una base de datos vectorial usando ChromaDB. Esta herramienta es ideal para preparar datos que luego se consultan desde otras aplicaciones.
 
-API encargada de la generacion de Embeddings para su debido guardado.
+## Características
 
-Cuando descarguen los cambios de la rama ejecutar el siguiente comando para que le instale todas las dependencias necesarias del proyecto.
+- Procesamiento de documentos y generación de embeddings
+- Almacenamiento en ChromaDB
+- Listo para integrarse con sistemas externos
 
-python -m venv venv ///hace un entorno virtual necesario para que corran las APIs
-venv\Scripts\activate /// activa el entorno virtual
-pip install -r requirements.txt /// instala dependencias
-deactivate /// para desactivar el venv
+## Instalación y uso
 
-uvicorn main:app --reload --port 8002 /// levantar la API (Con el venv activado)
+```bash
+# Crear entorno virtual (opcional)
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
 
-http://127.0.0.1:8002/docs#/ /// direccion para que abra swagger
-http://127.0.0.1:8002/process-documents /// Solicitud POST en postman
-PD: Poner localhost si gustan xd, asi lo tiro chat jjj
+# Instalar dependencias
+pip install -r requirements.txt
 
-Estructura JSON a utilizar
-{
-"id": "pruebaaaa2222",
-"embedding": [
-0.1, 0.2, 0.3
-],
-"metadata": {
-"source": "testsegundo"
-}
-}
-=======
-API encargada de la generacion de Embeddings para su debido guardado. 
-
-
-Nueva edicion para veficacion de commits
+# Ejecutar el servidor
+uvicorn main:app --reload --port 8002
